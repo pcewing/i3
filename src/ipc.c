@@ -930,6 +930,12 @@ IPC_HANDLER(tree) {
  */
 IPC_HANDLER(get_workspaces) {
     yajl_gen gen = ygenalloc();
+    y(map_open);
+
+    ystr("current_desktop");
+    y(integer, current_desktop.id);
+
+    ystr("workspaces");
     y(array_open);
 
     Con *focused_ws = con_get_workspace(focused);
@@ -977,11 +983,15 @@ IPC_HANDLER(get_workspaces) {
             ystr("urgent");
             y(bool, ws->urgent);
 
+            ystr("desktop");
+            y(integer, ws->desktop.id);
+
             y(map_close);
         }
     }
 
     y(array_close);
+    y(map_close);
 
     const unsigned char *payload;
     ylength length;

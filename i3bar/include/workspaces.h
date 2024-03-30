@@ -14,6 +14,7 @@
 #include <xcb/xproto.h>
 
 typedef struct i3_ws i3_ws;
+extern uint8_t current_desktop;
 
 TAILQ_HEAD(ws_head, i3_ws);
 
@@ -39,6 +40,7 @@ struct i3_ws {
     bool focused;             /* If the ws is currently focused */
     bool urgent;              /* If the urgent hint of the ws is set */
     struct i3_output *output; /* The current output of the ws */
+    uint8_t desktop;
 
     TAILQ_ENTRY(i3_ws) tailq; /* Pointer for the TAILQ-Macro */
 };

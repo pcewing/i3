@@ -49,6 +49,7 @@ typedef struct Assignment Assignment;
 typedef struct Window i3Window;
 typedef struct gaps_t gaps_t;
 typedef struct mark_t mark_t;
+typedef struct Desktop Desktop;
 
 /******************************************************************************
  * Helper types
@@ -636,6 +637,10 @@ struct mark_t {
     TAILQ_ENTRY(mark_t) marks;
 };
 
+struct Desktop {
+    uint8_t id;
+};
+
 /**
  * A 'Con' represents everything from the X11 root window down to a single X11 window.
  *
@@ -805,4 +810,6 @@ struct Con {
 
     /* The colormap for this con if a custom one is used. */
     xcb_colormap_t colormap;
+
+    Desktop desktop;
 };

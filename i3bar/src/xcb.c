@@ -2127,6 +2127,12 @@ void draw_bars(bool unhide) {
         if (!config.disable_ws) {
             i3_ws *ws_walk;
             TAILQ_FOREACH (ws_walk, outputs_walk->workspaces, tailq) {
+                if (ws_walk->desktop != current_desktop)
+                {
+                    DLOG("Skipping WS %s because it's in an inactive desktop\n",
+                        i3string_as_utf8(ws_walk->name));
+                    continue;
+                }
                 DLOG("Drawing button for WS %s at x = %d, len = %d\n",
                      i3string_as_utf8(ws_walk->name), workspace_width, ws_walk->name_width);
                 color_t fg_color = colors.inactive_ws_fg;

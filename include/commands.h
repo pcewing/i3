@@ -343,3 +343,9 @@ void cmd_gaps(I3_CMD, const char *type, const char *scope, const char *mode, con
  *
  */
 void cmd_title_window_icon(I3_CMD, const char *enable, int padding);
+
+/**
+ * Implementation of 'desktop <id>'
+ *
+ */
+void cmd_desktop(I3_CMD, long id);

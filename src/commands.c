@@ -2558,3 +2558,19 @@ void cmd_gaps(I3_CMD, const char *type, const char *scope, const char *mode, con
 error:
     ysuccess(false);
 }
+
+/**
+ * Implementation of 'desktop <id>'
+ *
+ */
+void cmd_desktop(I3_CMD, long id) {
+    if (id < 0 || id > UINT8_MAX) {
+        ELOG("Invalid desktop id %ld", id);
+        ysuccess(false);
+        return;
+    }
+
+    current_desktop.id = (uint8_t)id;
+    cmd_output->needs_tree_render = true;
+    ysuccess(true);
+}

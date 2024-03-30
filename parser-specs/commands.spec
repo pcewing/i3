@@ -44,6 +44,7 @@ state INITIAL:
   'mode' -> MODE
   'bar' -> BAR
   'gaps' -> GAPS
+  'desktop' -> DESKTOP
 
 state CRITERIA:
   ctype = 'class'       -> CRITERION
@@ -142,6 +143,10 @@ state GAPS_END:
       ->
   end
       -> call cmd_gaps($type, $scope, $mode, $value)
+
+state DESKTOP:
+  desktop = number
+      -> call cmd_desktop(&desktop)
 
 # layout default|stacked|stacking|tabbed|splitv|splith
 # layout toggle [split|all]

@@ -14,6 +14,8 @@
 
 #include <yajl/yajl_parse.h>
 
+uint8_t current_desktop = 1;
+
 /* A datatype to pass through the callbacks to save the state */
 struct workspaces_json_params {
     struct ws_head *workspaces;
@@ -21,6 +23,7 @@ struct workspaces_json_params {
     char *cur_key;
     bool need_output;
     bool parsing_rect;
+    uint8_t current_desktop;
 };
 
 /*
@@ -60,6 +63,12 @@ static int workspaces_boolean_cb(void *params_, int val) {
 static int workspaces_integer_cb(void *params_, long long val) {
     struct workspaces_json_params *params = (struct workspaces_json_params *)params_;
 
+    if (!strcmp(params->cur_key, "current_desktop")) {
+        params->current_desktop = (uint8_t)val;
+        FREE(params->cur_key);
+        return 1;
+    }
+
     if (!strcmp(params->cur_key, "id")) {
         params->workspaces_walk->id = val;
         FREE(params->cur_key);
@@ -89,6 +98,12 @@ static int workspaces_integer_cb(void *params_, long long val) {
     }
 
     if (!strcmp(params->cur_key, "height")) {
+        FREE(params->cur_key);
+        return 1;
+    }
+
+    if (!strcmp(params->cur_key, "desktop")) {
+        params->workspaces_walk->desktop = (uint8_t)val;
         FREE(params->cur_key);
         return 1;
     }
@@ -185,8 +200,19 @@ static int workspaces_start_map_cb(void *params_) {
         params->workspaces_walk = new_workspace;
         params->need_output = true;
         params->parsing_rect = false;
-    } else {
+    }
+    else {
         params->parsing_rect = true;
+    }
+
+    return 1;
+}
+
+static int workspaces_start_array_cb(void *params_) {
+    struct workspaces_json_params *params = (struct workspaces_json_params *)params_;
+
+    if (!strcmp(params->cur_key, "workspaces")) {
+        FREE(params->cur_key);
     }
 
     return 1;
@@ -232,6 +258,7 @@ static yajl_callbacks workspaces_callbacks = {
     .yajl_start_map = workspaces_start_map_cb,
     .yajl_end_map = workspaces_end_map_cb,
     .yajl_map_key = workspaces_map_key_cb,
+    .yajl_start_array = workspaces_start_array_cb,
 };
 
 /*
@@ -264,6 +291,8 @@ void parse_workspaces_json(const unsigned char *json, size_t size) {
             break;
         }
     }
+
+    current_desktop = params.current_desktop;
 
     yajl_free(handle);
     FREE(params.cur_key);

@@ -11,6 +11,7 @@
 
 struct Con *croot;
 struct Con *focused;
+struct Desktop current_desktop = {.id = 1};
 
 struct all_cons_head all_cons = TAILQ_HEAD_INITIALIZER(all_cons);
 

@@ -18,6 +18,8 @@ extern Con *focused;
 TAILQ_HEAD(all_cons_head, Con);
 extern struct all_cons_head all_cons;
 
+extern Desktop current_desktop;
+
 /**
  * Initializes the tree by creating the root node, adding all RandR outputs
  * to the tree (that means randr_init() has to be called before) and
